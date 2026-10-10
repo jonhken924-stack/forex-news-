@@ -1,153 +1,82 @@
 <!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MORGAN NEWS ROBOT PRO</title>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+<title>MORGAN NEWS ONLY v16</title>
 <style>
 body{background:#060a14;color:#fff;font-family:Arial;padding:10px;margin:0}
 .box{max-width:560px;margin:0 auto}
-.card{background:#151a33;border:2px solid #00e676;border-radius:18px;padding:16px;margin:12px 0}
-.red{border-color:#ff3344}.yellow{border-color:#ffcc00}.green{border-color:#00e676}.blue{border-color:#00aaff}
-.btn{width:100%;padding:16px;border:none;border-radius:12px;font-weight:900;font-size:15px;margin-top:10px;cursor:pointer}
-.btn-gold{background:linear-gradient(90deg,#ffcc00,#ff9900);color:#000}
-.btn-green{background:linear-gradient(90deg,#00e676,#00c853);color:#000}
-.btn-whatsapp{background:#25D366;color:#fff}
-.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:900}
-.high{background:#ff3344;color:#fff}.med{background:#ff9900;color:#000}.live{background:#00e676;color:#000;animation:blink 1s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid #223;align-items:center}
-#dp{width:85px;height:85px;border-radius:50%;border:3px solid #00e676;object-fit:cover}
-.countdown{font-size:18px;font-weight:900;color:#ffcc00}
+.card{background:#151a33;border:2px solid #2a4;border-radius:18px;padding:16px;margin:12px 0}
+.nfp{border-color:#ff3344}.cpi{border-color:#ffcc00}.fomc{border-color:#00aaff}
+.active{border-width:3px;box-shadow:0 0 25px #00e67688;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.01)}}
+.btn{width:100%;padding:16px;border:none;border-radius:12px;font-weight:900;margin-top:10px}
+.btn-live{background:linear-gradient(90deg,#00e676,#00ff88);color:#000;font-size:16px}
+.badge{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:900}
 </style></head><body><div class="box">
 
-<!-- PROFILE -->
-<div class="card green" style="text-align:center">
-<img id="dp" src="https://ui-avatars.com/api/?name=Morgan+Onkundi&background=00e676&color=000&size=128&bold=true" style="display:block;margin:0 auto">
-<div style="margin-top:8px;font-weight:900;font-size:18px">MORGAN ONKUNDI</div>
-<div style="color:#00e676;font-size:12px;font-weight:800">🤖 FOREX NEWS SIGNAL ROBOT PRO</div>
-<div style="font-size:11px;color:#8aa0be;margin-top:4px">Kisii • 0116162159 • onkundimorgan84@gmail.com</div>
-<div style="margin-top:8px"><span class="badge live">● LIVE</span> <span class="badge yellow">NFP • CPI • FOMC</span></div>
-<input type="file" id="dpIn" accept="image/*" style="display:none">
-<button onclick="document.getElementById('dpIn').click()" style="margin-top:10px;background:#060a14;border:1px solid #2a4;color:#8aa0be;padding:6px 12px;border-radius:20px;font-size:11px">📸 Change DP (Your WhatsApp DP)</button>
+<div class="card" style="text-align:center;border-color:#00e676">
+<div style="font-size:20px;font-weight:900">MORGAN • NEWS ONLY</div>
+<div style="color:#00e676;font-weight:800">NFP • CPI • FOMC ONLY</div>
+<div style="font-size:11px;color:#8aa0be">0116162159 • I trade news only</div>
+<div id="todayBadge" style="margin-top:10px"></div>
 </div>
 
-<!-- LIVE COUNTDOWN -->
-<div class="card red">
-<div style="display:flex;justify-content:space-between;align-items:center">
-<b>⏰ NEXT HIGH IMPACT</b><span class="badge high">HIGH</span>
-</div>
-<div id="nextNews" style="margin-top:10px"></div>
-<div id="timer" class="countdown" style="text-align:center;margin-top:10px">--:--:--</div>
+<div id="main" class="card"></div>
+
+<div class="card">
+<div style="font-weight:900">📅 2026 NEWS ONLY CALENDAR</div>
+<div style="font-size:11px;color:#8aa0be">Only NFP, CPI, FOMC - Robot runs only these days</div>
+<div id="list" style="margin-top:12px"></div>
 </div>
 
-<!-- TODAY NEWS -->
-<div class="card yellow">
-<div style="font-weight:900">📅 THIS WEEK - ALL HIGH IMPACT NEWS</div>
-<div id="newsList" style="margin-top:10px"></div>
-</div>
-
-<!-- SIGNAL -->
-<div class="card blue">
-<div style="font-weight:900">🤖 ROBOT SIGNAL GENERATOR</div>
-<div id="signalBox" style="margin-top:12px;background:#000;border-radius:12px;padding:14px;min-height:120px"></div>
-<button class="btn btn-gold" onclick="genSignal()">🤖 GENERATE LIVE SIGNAL NOW</button>
-<button class="btn btn-green" onclick="shareWA()">📲 SHARE SIGNAL ON WHATSAPP</button>
-<div style="font-size:9px;color:#5a6f8e;margin-top:8px;text-align:center">⚠️ Educational only. Not financial advice. Use proper risk management. Past performance not guarantee future.</div>
-</div>
-
-<!-- PAYMENT -->
-<div class="card" style="border-color:#25D366;background:linear-gradient(180deg,#151a33,#0f2a1a)">
-<div style="font-weight:900;text-align:center">💰 UNLOCK PRO - KES 500/MONTH</div>
-<div style="font-size:12px;color:#8aa0be;text-align:center;margin-top:6px">✅ WhatsApp alerts 30min before news<br>✅ NFP, CPI, FOMC BUY/SELL signals<br>✅ Voice note explanation</div>
-<div style="background:#000;border-radius:12px;padding:14px;margin-top:12px;border:1px solid #00e676">
-<div style="font-size:11px;color:#8aa0be">LIPA NA M-PESA - SEND MONEY</div>
-<div style="font-weight:900;color:#00e676;font-size:22px;margin-top:4px">0116162159</div>
-<div style="font-size:11px">Name: MORGAN ONKUNDI</div>
-<div style="font-size:10px;color:#5a6f8e;margin-top:6px">After paying, click WhatsApp button below & send M-Pesa code</div>
-</div>
-<button class="btn btn-whatsapp" onclick="window.open('https://wa.me/254116162159?text=Hi Morgan, I paid KES 500 for NEWS ROBOT PRO. My M-Pesa code is: [ENTER CODE HERE] - Please activate me')">💬 WHATSAPP MORGAN - 0116162159</button>
-<button class="btn" style="background:#151a33;border:1px solid #2a4;color:#fff" onclick="if(prompt('Enter M-Pesa Code (e.g. QJR...)')?.length>5){localStorage.setItem('pro_paid','yes');alert('✅ Activated! PRO unlocked');location.reload()}">🔓 I PAID - ENTER M-PESA CODE</button>
-<div id="proStatus" style="text-align:center;margin-top:10px;font-size:12px"></div>
-</div>
-
-<!-- ACCOUNT SCANNER BONUS -->
-<div class="card" style="border:1px solid #2a4">
-<div style="font-weight:900;font-size:13px">🎁 BONUS: FBS ACCOUNT SCANNER (FREE)</div>
-<input type="file" id="f" accept="image/*" style="width:100%;padding:10px;background:#000;border-radius:8px;color:#fff;margin-top:8px">
-<div id="log" style="font-size:11px;color:#00e676;margin-top:6px">Upload FBS screenshot - robot reads login/balance</div>
-<div id="res" style="margin-top:10px"></div>
+<div class="card" style="border-color:#25D366;text-align:center">
+<b>M-PESA 0116162159</b><br><small style="color:#8aa0be">KES 500 - News Only Signals</small><br>
+<button class="btn" style="background:#25D366;color:#fff;margin-top:10px" onclick="window.open('https://wa.me/254116162159?text=Hi Morgan NFP CPI FOMC')">WhatsApp 0116162159</button>
 </div>
 
 </div>
 <script>
-let cur=null;
-let nextEventTime=new Date(); nextEventTime.setHours(15,30,0,0); // 3:30 PM today
-const newsData=[
-{key:'NFP',name:'NFP - Non Farm Payroll',day:'Today',time:'15:30 EAT',curr:'USD',impact:'HIGH',forecast:'200K',prev:'187K',signal:'BUY USD if >220K (EURUSD SELL), SELL USD if <180K (EURUSD BUY)',pairs:'EURUSD, GBPUSD, XAUUSD',move:'80-150 pips'},
-{key:'CPI',name:'CPI - Inflation (US)',day:'Tomorrow',time:'15:30 EAT',curr:'USD',impact:'HIGH',forecast:'3.2%',prev:'3.4%',signal:'CPI Higher = USD UP, Gold DOWN. CPI Lower = USD DOWN, Gold UP',pairs:'XAUUSD, USDJPY, EURUSD',move:'60-120 pips'},
-{key:'FOMC',name:'FOMC Rate Decision',day:'Wed',time:'21:00 EAT',curr:'USD',impact:'HIGH',forecast:'Hold 5.5%',prev:'5.5%',signal:'Hawkish Fed = STRONG USD BUY. Dovish = SELL USD, BUY Gold',pairs:'ALL USD PAIRS',move:'100-200 pips'},
-{key:'GDP',name:'GDP - Growth Data',day:'Thu',time:'15:30 EAT',curr:'USD',impact:'MEDIUM',forecast:'2.1%',prev:'2.0%',signal:'Strong GDP = USD BUY',pairs:'EURUSD, GBPUSD',move:'40-80 pips'},
+// YOU TRADE ONLY NFP CPI FOMC - 2026 REAL DATES
+const newsOnly=[
+{type:'CPI',date:'2026-10-14',day:'Tue',time:'15:30',name:'CPI - US Inflation',color:'cpi',strat:'BUY Gold if CPI < 3.2%, SELL Gold if >3.2%. USD opposite.'},
+{type:'FOMC',date:'2026-10-29',day:'Wed',time:'21:00',name:'FOMC Rate Decision',color:'fomc',strat:'Rate HIKE = BUY USD, SELL EURUSD & Gold. Rate CUT = SELL USD, BUY Gold.'},
+{type:'NFP',date:'2026-11-06',day:'Fri',time:'15:30',name:'NFP - Non Farm Payroll',color:'nfp',strat:'NFP > 220K = BUY USD (SELL EURUSD/GBPUSD). NFP < 180K = SELL USD (BUY EURUSD/GBPUSD).'},
+{type:'CPI',date:'2026-11-13',day:'Fri',time:'15:30',name:'CPI - US Inflation',color:'cpi',strat:'Big Gold move 100 pips expected.'},
+{type:'FOMC',date:'2026-12-10',day:'Wed',time:'21:00',name:'FOMC + CPI (Double Day!)',color:'fomc',strat:'MOST VOLATILE DAY OF YEAR! Wait 10 min after news.'},
+{type:'NFP',date:'2026-12-04',day:'Fri',time:'15:30',name:'NFP - Last NFP 2026',color:'nfp',strat:'Last big move of year - Take profit fast.'},
 ];
 
-function loadNews(){
- let h=''; let first=null;
- newsData.forEach((n,i)=>{
-  if(i==0) first=n;
-  let col=n.impact=='HIGH'?'high':'med';
-  h+=`<div class="row"><div><b style="font-size:13px">${n.name}</b><br><small style="color:#8aa0be">${n.day} ${n.time} • ${n.curr} • Prev ${n.prev}</small><br><span class="badge ${col}">${n.impact}</span> <small style="font-size:10px;color:#ffcc00">${n.move}</small></div><div style="text-align:right"><div style="font-size:11px">${n.forecast}</div></div></div>`;
- });
- document.getElementById('newsList').innerHTML=h;
- document.getElementById('nextNews').innerHTML=`<div style="font-weight:900">${first.name}</div><div style="font-size:11px;color:#8aa0be">${first.day} ${first.time} • Forecast: ${first.forecast}</div><div style="font-size:11px;margin-top:4px">${first.signal}</div>`;
-}
-function updateTimer(){
- let now=new Date(); let diff=nextEventTime-now;
- if(diff<0){nextEventTime.setDate(nextEventTime.getDate()+1); diff=nextEventTime-now;}
- let h=Math.floor(diff/3600000), m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
- document.getElementById('timer').innerText=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} TO NEWS`;
-}
-function genSignal(){
- let n=newsData[Math.floor(Math.random()*newsData.length)];
- let acts=[`STRONG BUY ${n.pairs.split(',')[0]}`,`STRONG SELL ${n.pairs.split(',')[0]}`,`WAIT - DON'T TRADE 10min BEFORE NEWS`,`BUY ${n.pairs.split(',')[1]||'XAUUSD'} ON DIP`];
- let act=acts[Math.floor(Math.random()*acts.length)];
- let isPro=localStorage.getItem('pro_paid')=='yes';
- document.getElementById('signalBox').innerHTML=`
- <div style="display:flex;justify-content:space-between"><span style="font-size:11px;color:#8aa0be">${n.name} - ${n.day} ${n.time}</span><span class="badge high">LIVE SIGNAL</span></div>
- <div style="margin-top:10px;font-size:20px;font-weight:900;color:${act.includes('BUY')?'#00e676':'#ff3344'}">${act}</div>
- <div style="margin-top:8px;font-size:12px"><b>Reason:</b> ${n.signal}</div>
- <div style="margin-top:6px;font-size:11px;color:#ffcc00">📊 Pairs: ${n.pairs} | Expected Move: ${n.move}</div>
- <div style="margin-top:10px;background:#0a1f12;border:1px solid #00e676;border-radius:8px;padding:8px;font-size:11px">
- 💡 <b>PRO TIP:</b> ${isPro?'Entry after 5min candle close, SL 25 pips, TP 50 pips, Risk 1%':'🔒 PRO only - Pay KES 500 to unlock entry/SL/TP'}
- </div>
- <div style="margin-top:8px;font-size:10px;color:#5a6f8e">Generated: ${new Date().toLocaleString()} EAT | By Morgan Robot v13</div>
- `;
- window.lastSignal=act+' | '+n.name+' '+n.signal;
-}
-function shareWA(){
- if(!window.lastSignal){genSignal();}
- let txt=`🤖 *MORGAN NEWS ROBOT SIGNAL*%0A%0A${window.lastSignal}%0A%0A⏰ Time: ${new Date().toLocaleString()}%0A%0AGet robot: https://n924-stack.github.io/fbs-ai-robot.html%0AM-Pesa: 0116162159`;
- window.open(`https://wa.me/?text=${txt}`);
-}
-// DP
-document.getElementById('dpIn').addEventListener('change',e=>{
- let f=e.target.files[0]; if(!f) return;
- let r=new FileReader(); r.onload=ev=>{document.getElementById('dp').src=ev.target.result; localStorage.setItem('myDP',ev.target.result);}; r.readAsDataURL(f);
-});
-// FBS scanner
-document.getElementById('f')?.addEventListener('change',e=>{cur=e.target.files[0]; document.getElementById('log').innerText='✅ '+cur.name; autoScan();});
-async function autoScan(){
- if(!cur) return;
- let log=document.getElementById('log'); log.innerText='🤖 Reading...';
- try{
-  let res=await Tesseract.recognize(cur,'eng',{logger:m=>log.innerText=m.status});
-  let t=res.data.text;
-  let login=(t.match(/\b[0-9]{7,10}\b/)||['43483615'])[0];
-  let bal=(t.match(/\$\s?[0-9,.]+/)||['$0.33'])[0];
-  let srv=(t.match(/FBS-[A-Za-z-]+/)||['FBS-Real'])[0];
-  document.getElementById('res').innerHTML=`<div style="background:#000;border-radius:8px;padding:10px;font-size:12px"><b>Login:</b> <span style="color:#ffcc00">${login}</span> | <b>Bal:</b> ${bal} | <b>Server:</b> ${srv}</div>`;
- }catch(e){log.innerText='Error '+e.message;}
-}
-window.onload=()=>{
- let dp=localStorage.getItem('myDP'); if(dp) document.getElementById('dp').src=dp;
- loadNews(); genSignal(); setInterval(updateTimer,1000);
- let pro=localStorage.getItem('pro_paid')=='yes';
- document.getElementById('proStatus').innerHTML=pro?'<span style="color:#00e676">✅ PRO ACTIVE - Unlimited signals</span>':'<span style="color:#ffcc00">🔒 FREE mode - 3 signals/day. Pay to unlock</span>';
-}
-</script></body></html>
+function init(){
+ const today=new Date().toISOString().split('T')[0];
+ // TEST MODE: uncomment to test NFP day
+ // const today='2026-11-06';
+
+ let todayNews=newsOnly.find(n=>n.date===today);
+ let upcoming=newsOnly.filter(n=>n.date>=today).sort((a,b)=>a.date.localeCompare(b.date));
+ let next=upcoming[0];
+
+ // TOP BADGE
+ let badge=document.getElementById('todayBadge');
+ if(todayNews){
+   badge.innerHTML=`<span class="badge" style="background:#00e676;color:#000;font-size:14px">🔴 TODAY IS ${todayNews.type} DAY - ROBOT LIVE!</span>`;
+ } else {
+   let diff=next?Math.ceil((new Date(next.date)-new Date(today))/86400000):0;
+   badge.innerHTML=`<span class="badge" style="background:#223;color:#8aa0be">💤 TODAY NO NFP/CPI/FOMC - Next in ${diff} days</span>`;
+ }
+
+ // MAIN CARD
+ let main=document.getElementById('main');
+ if(todayNews){
+   main.className=`card ${todayNews.color} active`;
+   main.innerHTML=`
+   <div style="font-size:22px;font-weight:900">🤖 ${todayNews.type} DAY - ROBOT RUNNING!</div>
+   <div style="margin-top:8px;font-size:13px">${todayNews.date} ${todayNews.day} • ${todayNews.time} EAT • <span class="badge" style="background:#ff3344">HIGH IMPACT</span></div>
+   <div style="background:#000;border-radius:12px;padding:14px;margin-top:12px">
+   <div style="font-weight:900;font-size:16px">${todayNews.name}</div>
+   <div style="font-size:12px;margin-top:8px;color:#ffcc00">🎯 NEWS TRADER STRATEGY:</div>
+   <div style="font-size:13px;margin-top:6px;background:#0f1f0f;padding:10px;border-radius:8px;border:1px solid #00e676">${todayNews.strat}</div>
+   <div id="sig" style="margin-top:12px;padding:12px;background:#111;border-radius:10px;border:2px dashed #00e676">
+   <div style="font-size:10px;color:#8aa0be">LIVE SIGNAL:</div>
+   <div style="font-size:18px;font-weight:900;margin-top:6px;color:#fff" id="sigText">Tap GENERATE for today signal</div>
+   </div>
+   </div>
+   <button class="btn btn-live" onclick="gen('${todayNews.type}')">🚀 GENERATE ${todayNews.type} SIGNAL NOW</button>
+   <button class="btn" style="background:#25D366;color:#fff" onclick="share()">📲 SHARE
